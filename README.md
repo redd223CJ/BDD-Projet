@@ -21,3 +21,13 @@ Open phpmyadmin at [http://localhost:8080](http://localhost:8080)
 Open web browser to look at a simple php example at [http://localhost](http://localhost)
 
 Enjoy !
+
+## For the course on databases
+This is a fork of Joel Cavat's repository. This fork contains some changes to reflect some of the examples we would see in the course, but also provides you a starting point for your project. Notice that the name of the host on which MySQL resides is `ms8db`. This may need to be changed to `localhost` once you deploy your code on the department's machines. I strongly encourage groups to use Git to collaborate. If you are not familiar with Git, you can download this project as a ZIP folder. If you want to use this Docker composition, you will need to install Docker.
+
+* Install docker
+* Download, or fork and clone this repository
+* Open a command promps from the directory containing this project
+* Execute the commands as shown above
+
+Good luck !
