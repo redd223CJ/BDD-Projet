@@ -3,11 +3,11 @@ services:
     www:
         build: .
         ports: 
-            - "8001:80"
+            - "80:80"
         volumes:
             - ./www:/var/www/html/
         links:
-            - db
+            - db:ms8db
         networks:
             - default
     db:
@@ -16,25 +16,19 @@ services:
             - "3306:3306"
         command: --default-authentication-plugin=mysql_native_password
         environment:
-            MYSQL_DATABASE: myDb
-            MYSQL_USER: user
-            MYSQL_PASSWORD: test
-            MYSQL_ROOT_PASSWORD: test 
+            # DO NOT FORGET TO UPDATE YOUR DATABASE, USERNAME, AND PASSWORD WITH THAT OF YOUR GROUP!
+            MYSQL_DATABASE: groupXX
+            MYSQL_USER: groupXX
+            MYSQL_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: pass 
         volumes:
             - ./dump:/docker-entrypoint-initdb.d
             - ./conf:/etc/mysql/conf.d
-            - persistent:/var/lib/mysql
         networks:
             - default
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         links: 
-            - db:db
+            - db:ms8db
         ports:
-            - 8000:80
-        environment:
-            MYSQL_USER: user
-            MYSQL_PASSWORD: test
-            MYSQL_ROOT_PASSWORD: test 
-volumes:
-    persistent:
+            - 8080:80
