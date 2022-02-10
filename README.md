@@ -30,4 +30,6 @@ This is a fork of Joel Cavat's repository. This fork contains some changes to re
 * Open a command promps from the directory containing this project
 * Execute the commands as shown above
 
+By default, the database, username, and password are: `groupXX`, `groupXX`, and `secret`. Do not forget to change those in `docker-compose.yml`. 
+
 Good luck !
