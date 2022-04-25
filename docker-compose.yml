@@ -14,7 +14,7 @@ services:
         image: mysql:8.0
         ports: 
             - "3306:3306"
-        command: --default-authentication-plugin=mysql_native_password
+        command: --default-authentication-plugin=mysql_native_password --secure-file-priv=/docker-entrypoint-initdb.d
         environment:
             # DO NOT FORGET TO UPDATE YOUR DATABASE, USERNAME, AND PASSWORD WITH THAT OF YOUR GROUP!
             MYSQL_DATABASE: groupXX
