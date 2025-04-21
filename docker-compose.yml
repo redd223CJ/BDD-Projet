@@ -17,9 +17,9 @@ services:
         command: --default-authentication-plugin=mysql_native_password --secure-file-priv=/docker-entrypoint-initdb.d
         environment:
             # DO NOT FORGET TO UPDATE YOUR DATABASE, USERNAME, AND PASSWORD WITH THAT OF YOUR GROUP!
-            MYSQL_DATABASE: groupXX
-            MYSQL_USER: groupXX
-            MYSQL_PASSWORD: secret
+            MYSQL_DATABASE: group22
+            MYSQL_USER: group22
+            MYSQL_PASSWORD: ulgfsa
             MYSQL_ROOT_PASSWORD: pass 
         volumes:
             - ./dump:/docker-entrypoint-initdb.d
