@@ -7,7 +7,7 @@ services:
         volumes:
             - ./www:/var/www/html/
         links:
-            - db:ms8db
+            - db:localhost
         networks:
             - default
     db:
@@ -29,6 +29,6 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         links: 
-            - db:ms8db
+            - db:localhost
         ports:
             - 8080:80
