@@ -8,6 +8,7 @@
     <?php
         $bdd = new PDO('mysql:host=db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
 
+        $bdd->beginTransaction();
         // temps moyen global
         $sql_global = "SELECT 
                           SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(h.HEURE_ARRIVEE, h.HEURE_DEPART)))) as temps_arret_moyen
@@ -85,6 +86,8 @@
             echo "</tr>";
 
         }
+
+        $bdd->commit();
         
         echo "</table>";
     
