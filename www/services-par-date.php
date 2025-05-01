@@ -47,7 +47,7 @@
             if ($red) {
                 echo "<tr><td>" . htmlentities($red['DATE_ACTUELLE']) . "</td><td>" . htmlentities($red['SERVICES']) . "</td></tr>";
             } else {
-                echo "<tr><td>colspan='2'Aucun service assuré ce jour.</td></tr>";
+                echo "<tr><tdcolspan='2'>Aucun service assuré ce jour ou aucune date entrée.</td></tr>";
             }
         }
         ?>
