@@ -38,7 +38,7 @@
             $suppItineraire = $bdd->prepare("DELETE FROM ITINERAIRE WHERE ID = ?");
             $suppItineraire->execute([$id]); ?>
 
-            <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. Veuillez actualiser la page pour mettre les changements à jour.</p>
+            <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. Veuillez actualiser pour mettre les changements à jour sur cette page.</p>
         <?php }
     ?>
 
@@ -86,14 +86,18 @@
 
         $insertTraj = $bdd->prepare("INSERT INTO TRAJET (TRAJET_ID, SERVICE_ID, ITINERAIRE_ID, DIRECTION) VALUES (?,?,?,?)");
         $insertTraj->execute([$_POST['IDtrajet'], $_POST['liste_serv'], $_POST['liste_itinéraire'], $_POST['liste_direction']]); ?>
-        <p>Trajet ajouté : itinéraire <?= $_POST['liste_itinéraire']?>, direction <?= $_POST['liste_direction']?>.</p>
+        <p>Trajet ajouté : itinéraire <?= $_POST['liste_itinéraire']?>, direction <?= $_POST['liste_direction']?>.</p><br><br>
     <?php }  ?>
 
     <?php if(isset($_POST['liste_itinéraire']) && isset($_POST['liste_direction']) && isset($_POST['IDtrajet']) && isset($_POST['liste_serv']) && !isset($_POST['horaire'])) { ?>
         <form method="post" action="gestion-itinéraire.php">
-            <label for="textarea"> Horaire du trajet à ajouter : </label><br><br>
-            <small>Arrêt, Heure d'arrivée, Heure de départ</small><br>
-            <textarea rows="50" cols="50" name="horaire" placeholder="Eupen, , 8:00:00\nLiège-Guillemins, 08:30:00, 08:35:00\nNamur, 10:00:00, 10:05:00\nCharleroi, 10:45:00, "></textarea>
+            <label for="textarea"> <strong>Horaire du trajet à ajouter :</strong> </label>
+            [Format : Arrêt, Heure d'arrivée, Heure de départ]<br>
+            <textarea rows="30" cols="70" name="horaire" placeholder=
+            "Eupen, , 8:00:00
+Liège-Guillemins, 08:30:00, 08:35:00
+Namur, 10:00:00, 10:05:00
+Charleroi, 10:45:00, "></textarea>
 
             <!-- Hidden inputs pour passer les données du formulaire précédent. -->
             <input type="hidden" name="IDtrajet" value="<?= htmlentities($_POST['IDtrajet']) ?>">
@@ -152,7 +156,7 @@
             }
         } 
          ?>
-        <p>Horaire ajouté pour le trajet <?= htmlentities($_POST['IDtrajet'])?>. Veuillez actualiser la page pour mettre les changements à jour.</p>
+        <p>Horaire ajouté pour le trajet <?= htmlentities($_POST['IDtrajet'])?>.</p>
     <?php 
     }
     ?>

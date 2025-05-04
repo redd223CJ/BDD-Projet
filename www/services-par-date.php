@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <p><strong>Entrez une date au format AAAA-MM-JJ</strong> (exemple : 2025-04-21) ou laissez vide pour tout afficher :</p>
+    <p><strong>Choisissez une date</strong> ou <strong>laissez vide</strong> pour tout afficher :</p>
     <form method="post" action="services-par-date.php">
         <label for="date">Date :</label>
         <input type="date" name="date" id="date">
@@ -31,7 +31,7 @@
                 GROUP BY DATE_ACTUELLE
                 ORDER BY DATE_ACTUELLE");
             $toutAfficher->execute();
-            foreach ($req as $row) { ?>
+            foreach ($toutAfficher as $row) { ?>
                 <tr><td><?= htmlentities($row['DATE_ACTUELLE']);?> </td><td> <?= htmlentities($row['SERVICES']); ?> </td></tr> <?php
             }
         }
@@ -42,7 +42,7 @@
                 WHERE DATE_ACTUELLE = :date
                 GROUP BY DATE_ACTUELLE");
             $filtrage->execute(['date' => $_POST['date']]);
-            $filtragefetch = $sth->fetch();
+            $filtragefetch = $filtrage->fetch();
 
             if ($filtragefetch) { ?>
                 <tr><td><?= htmlentities($filtragefetch['DATE_ACTUELLE']); ?> </td><td> <?= htmlentities($filtragefetch['SERVICES']); ?> </td></tr> <?php
