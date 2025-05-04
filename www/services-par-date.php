@@ -6,6 +6,7 @@
 </head>
 
 <body>
+    <!-- Formulaire -->
     <p><strong>Choisissez une date</strong> ou <strong>laissez vide</strong> pour tout afficher :</p>
     <form method="post" action="services-par-date.php">
         <label for="date">Date :</label>
@@ -15,6 +16,7 @@
     </form>
 
     <h1>Résultat :</h1>
+    <!-- Affichage des résultats dans une table -->
     <table border = "1">
         <tr>
             <th>Date</th>
@@ -22,8 +24,10 @@
         </tr>
 
         <?php
+        // Initialisation BDD
         $bdd = new PDO('mysql:host=db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
 
+        // Tout afficher
         if (isset($_POST['tout'])) {
             $toutAfficher = $bdd->prepare("
                 SELECT DATE_ACTUELLE, GROUP_CONCAT(NOM_SERVICE ORDER BY NOM_SERVICE) AS SERVICES
@@ -35,6 +39,8 @@
                 <tr><td><?= htmlentities($row['DATE_ACTUELLE']);?> </td><td> <?= htmlentities($row['SERVICES']); ?> </td></tr> <?php
             }
         }
+
+        // Filtrer par date
         if (isset($_POST['filtrer'])) {
             $filtrage = $bdd->prepare("
                 SELECT DATE_ACTUELLE, GROUP_CONCAT(NOM_SERVICE ORDER BY NOM_SERVICE) AS SERVICES
