@@ -43,7 +43,7 @@
                 $suppItineraire->execute([$id]); 
 
                 if ($suppHoraire && $suppArretDesservi && $suppTrajet && $suppItineraire) { ?>
-                    <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. Veuillez actualiser pour mettre les changements à jour sur cette page.</p>
+                    <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. &#10003; <br> Veuillez actualiser pour mettre les changements à jour sur cette page.</p>
                     <?php
                     $bdd->commit();
                 }
@@ -101,7 +101,7 @@
     <!-- Formulaire horaire du trajet à ajouter -->
     <?php if(isset($_POST['liste_itinéraire']) && isset($_POST['liste_direction']) && isset($_POST['IDtrajet']) && isset($_POST['liste_serv']) && !isset($_POST['horaire'])) { ?>
         <form method="post" action="gestion-itinéraire.php">
-            <label for="textarea"> <strong>Horaire du trajet à ajouter :</strong> </label>
+            <label for="textarea"> <strong><br>Horaire du trajet à ajouter :</strong> </label>
             [Format : Arrêt, Heure d'arrivée, Heure de départ]<br>
             <textarea rows="30" cols="70" name="horaire" placeholder=
             "Eupen, , 8:00:00
@@ -184,7 +184,7 @@ Charleroi, 10:45:00, "></textarea>
             } 
             $bdd->commit();
             ?>
-            <p>Horaire et trajet <?= htmlentities($trajet_ID)?> ajoutés avec succès.</p>
+            <p>Horaire et trajet <?= htmlentities($trajet_ID)?> ajoutés avec succès. &#10003;</p>
         <?php 
         }
         catch (Exception $e)
