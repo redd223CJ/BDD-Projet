@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Filtrer les exception</title>
+    <title>Filtrer les exceptions</title>
 </head>
 
 <body>
