@@ -7,7 +7,7 @@
 
 <body>
     <form method="post" action="exception-filtrage.php">
-        <p>Filtrer les exception selon un ou plusieurs critères (recherche insensible à la casse).</p>
+        <p>Filtrer les exceptions selon un ou plusieurs critères (recherche insensible à la casse).</p>
         <input type="hidden" name="action" value="filtrer" />
         <input type="text" name="service_id" placeholder="ID service">
         <input type="text" name="date" placeholder="Date">
