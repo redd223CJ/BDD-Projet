@@ -42,14 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = new PDO('mysql:host=ms8db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $pdo->beginTransaction();
+        $pdo->beginTransaction();                 // debut de transaction
 
         $nom = $_POST['nom'];
-        $joursCochés = $_POST['jours'] ?? [];
+        $joursCochés = $_POST['jours'] ?? [];     // recup jours coches (ou vide)
         $date_debut = $_POST['date_debut'];
         $date_fin = $_POST['date_fin'];
 
-        // 🆕 Récupérer un ID unique
+        // Récupérer un ID unique
         $sql_max_id = "SELECT MAX(ID) AS max_id FROM SERVICE";
         $result = $pdo->query($sql_max_id);
         $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -57,13 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $joursFinal = [];
         foreach (['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'] as $j) {
-            $joursFinal[] = in_array($j, $joursCochés) ? 1 : 0;
+            $joursFinal[] = in_array($j, $joursCochés) ? 1 : 0;            // transforme jours en 0 ou 1
         }
 
         $sql = "INSERT INTO SERVICE (ID, NOM, LUNDI, MARDI, MERCREDI, JEUDI, VENDREDI, SAMEDI, DIMANCHE, DATE_DEBUT, DATE_FIN) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(array_merge([$id_service, $nom], $joursFinal, [$date_debut, $date_fin]));
+        $stmt->execute(array_merge([$id_service, $nom], $joursFinal, [$date_debut, $date_fin]));        // insertion du service
 
         $exceptions = explode("\n", $_POST['exceptions']);
         $stmt_exc = $pdo->prepare("INSERT INTO EXCEPTION (SERVICE_ID, DATE, CODE) VALUES (?, ?, ?)");
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($code_val === null) {
                     throw new Exception("Code d'exception invalide : $code");
                 }
-                $stmt_exc->execute([$id_service, $date, $code_val]);
+                $stmt_exc->execute([$id_service, $date, $code_val]);        // insert exception
             }
         }
         
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } catch (Exception $e) {
         if ($pdo) {
-            $pdo->rollBack();
+            $pdo->rollBack();        // annule transaction si erreur (rollback)
         }
         echo "<p style='color:red;'>Erreur : " . $e->getMessage() . "</p>";
     }
