@@ -39,7 +39,7 @@
             $suppItineraire = $bdd->prepare("DELETE FROM ITINERAIRE WHERE ID = ?");
             $suppItineraire->execute([$id]); ?>
 
-            <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants.</p>
+            <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. Veuillez actualiser la page pour mettre les changements à jour.</p>
         <?php }
     ?>
 
@@ -53,18 +53,18 @@
             foreach ($ls_itin as $row) { ?>
                 <option value="<?= $row['ID']; ?>"><?= $row['NOM']; ?></option>
             <?php } ?>
-        </select>
+        </select><br>
 
         <label for="liste_direction">Direction du trajet à ajouter :</label>
         <select name ="liste_direction">
             <option value="0">0</option>
             <option value="1">1</option> 
-        </select>
+        </select><br>
 
         <label for="ID_trajet">ID du trajet à ajouter :</label>
-        <input type="text" name="IDtrajet" placeholder="88____:007::8891702:8844628:40:843:20250314" required>
+        <input type="text" name="IDtrajet" placeholder="88____:007::8891702:8844628:40:843:20250314" required><br>
+
         <label for="liste_services">Service du trajet à ajouter :</label>
-        
         <select name ="liste_serv">
             <?php
             $serv = $bdd->query("SELECT ID,NOM FROM SERVICE ORDER BY ID");
