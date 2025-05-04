@@ -6,6 +6,7 @@
 </head>
 
 <body>
+    <!-- Formulaire de suppression d'itinéraire -->
     <h1> Suppression d'itinéraire </h1>
     <form method ="post" action="gestion-itinéraire.php">
 
@@ -24,24 +25,46 @@
 
     <?php
         if (isset($_POST['liste_supp'])) {
-            $id = $_POST['liste_supp'];
+            try {
+                // Début transaction suppression itinéraire, trajet, horaire, arrêt desservi
+                $bdd->beginTransaction();
+                $id = $_POST['liste_supp'];
 
-            $suppHoraire = $bdd->prepare("DELETE FROM HORAIRE WHERE ITINERAIRE_ID = ?");
-            $suppHoraire->execute([$id]);
+                $suppHoraire = $bdd->prepare("DELETE FROM HORAIRE WHERE ITINERAIRE_ID = ?");
+                $suppHoraire->execute([$id]);
 
-            $suppArretDesservi = $bdd->prepare("DELETE FROM ARRET_DESSERVI WHERE ITINERAIRE_ID = ?");
-            $suppArretDesservi->execute([$id]);
+                $suppArretDesservi = $bdd->prepare("DELETE FROM ARRET_DESSERVI WHERE ITINERAIRE_ID = ?");
+                $suppArretDesservi->execute([$id]);
 
-            $suppTrajet = $bdd->prepare("DELETE FROM TRAJET WHERE ITINERAIRE_ID = ?");
-            $suppTrajet->execute([$id]);
+                $suppTrajet = $bdd->prepare("DELETE FROM TRAJET WHERE ITINERAIRE_ID = ?");
+                $suppTrajet->execute([$id]);
 
-            $suppItineraire = $bdd->prepare("DELETE FROM ITINERAIRE WHERE ID = ?");
-            $suppItineraire->execute([$id]); ?>
+                $suppItineraire = $bdd->prepare("DELETE FROM ITINERAIRE WHERE ID = ?");
+                $suppItineraire->execute([$id]); 
 
-            <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. Veuillez actualiser pour mettre les changements à jour sur cette page.</p>
-        <?php }
+                if ($suppHoraire && $suppArretDesservi && $suppTrajet && $suppItineraire) { ?>
+                    <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. Veuillez actualiser pour mettre les changements à jour sur cette page.</p>
+                    <?php
+                    $bdd->commit();
+                }
+                else {
+                    $bdd->rollBack();
+                    throw new Exception("Erreur lors de la suppression de l'itinéraire. Aucun changement effectué.");
+                }
+            }
+            catch (Exception $e)
+            {
+                $bdd->rollBack();
+                if ($e instanceof \PDOException) {
+                    die("Une erreur interne est survenue.");
+                } else {
+                    die($e->getMessage());
+                }
+            }
+        }
     ?>
 
+    <!-- Formulaire d'ajout de trajet -->
     <h1> Ajout de trajet </h1>
     <form method ="post" action="gestion-itinéraire.php">
 
@@ -75,20 +98,7 @@
         <input type="submit" value="Soumettre">
     </form>
 
-    <!-- Ajouter à la table TRAJET qui contient TRAJET_ID,SERVICE_ID,ITINERAIRE_ID,DIRECTION  -->
-    <?php if (isset($_POST['liste_itinéraire']) && isset($_POST['liste_direction']) && isset($_POST['IDtrajet']) && isset($_POST['liste_serv']) && !isset($_POST['horaire'])) {
-        $arretExistant = $bdd->prepare("SELECT COUNT(*) FROM TRAJET WHERE TRAJET_ID = ?");
-        $arretExistant->execute([$_POST['IDtrajet']]);
-        if ($arretExistant->fetchColumn() > 0) { ?>
-            <p>Erreur : un trajet avec cet ID existe déjà.</p>
-            <?php return;
-        }
-
-        $insertTraj = $bdd->prepare("INSERT INTO TRAJET (TRAJET_ID, SERVICE_ID, ITINERAIRE_ID, DIRECTION) VALUES (?,?,?,?)");
-        $insertTraj->execute([$_POST['IDtrajet'], $_POST['liste_serv'], $_POST['liste_itinéraire'], $_POST['liste_direction']]); ?>
-        <p>Trajet ajouté : itinéraire <?= $_POST['liste_itinéraire']?>, direction <?= $_POST['liste_direction']?>.</p><br><br>
-    <?php }  ?>
-
+    <!-- Formulaire horaire du trajet à ajouter -->
     <?php if(isset($_POST['liste_itinéraire']) && isset($_POST['liste_direction']) && isset($_POST['IDtrajet']) && isset($_POST['liste_serv']) && !isset($_POST['horaire'])) { ?>
         <form method="post" action="gestion-itinéraire.php">
             <label for="textarea"> <strong>Horaire du trajet à ajouter :</strong> </label>
@@ -110,54 +120,82 @@ Charleroi, 10:45:00, "></textarea>
         </form>
     <?php } ?>
 
-    <!-- Ajouter contenu du textarea à la table HORAIRE qui contient TRAJET_ID,ITINERAIRE_ID,ARRET_ID,HEURE_ARRIVEE,HEURE_DEPART -->
-    <?php if (isset($_POST['horaire'])) {
-        $lines = explode("\n", $_POST['horaire']);
-        
-        if($lines){
-            foreach($lines as $line) {
-                if (trim($line) == '') continue;
-                $ln = explode(',', $line);
-                $l = array_map('trim', $ln);
-                $arret = $l[0];
-                $hArriv = $l[1] ?? null;
-                $hDep = $l[2] ?? null;
-
-                $idArret = $bdd->prepare("SELECT ID FROM ARRET WHERE NOM = ?");
-                $idArret->execute([$arret]);
-                $arretRow = $idArret->fetch();
-
-                if (!$arretRow) { ?>
-                    <p> Erreur : arrêt inexistant ou mal orthographié.</p>
-                    <?php return;
-                } 
-                $arretID = $arretRow['ID'];
-
-                if ($hArriv && !preg_match('/^\d{2}:\d{2}:\d{2}$/', $hArriv))
-                { ?>
-                    <p>Erreur : format HH:MM:SS attendu pour l'heure d'arrivée.</p>
-                <?php return;
-                }
-
-                if ($hDep && !preg_match('/^\d{2}:\d{2}:\d{2}$/', $hDep))
-                { ?>
-                    <p>Erreur : format HH:MM:SS attendu pour l'heure de départ.</p>
-                <?php return;
-                }
-
-                if ($hArriv && $hDep && strtotime($hArriv) > strtotime($hDep)) { ?>
-                    <p> Erreur : l'heure d'arrivée doit être inférieure ou égale à l'heure de départ (sauf si une des deux est vide).</p>
-                    <?php return;
-                }
-
-                $insertHoraire = $bdd->prepare("INSERT INTO HORAIRE (TRAJET_ID, ITINERAIRE_ID, ARRET_ID, HEURE_ARRIVEE, HEURE_DEPART)
-                VALUES (?, ?, ?, ?, ?)");
-                $insertHoraire->execute([$_POST['IDtrajet'], $_POST['liste_itinéraire'], $arretID, $hArriv ?: null, $hDep ?: null]);
-            }
-        } 
-         ?>
-        <p>Horaire ajouté pour le trajet <?= htmlentities($_POST['IDtrajet'])?>.</p>
+    <!-- Insertion aux tables -->
     <?php 
+    if (isset($_POST['horaire'])) {
+        try 
+        {   
+            $bdd->beginTransaction();
+
+            $trajet_ID = $_POST['IDtrajet'];
+            $service_ID = $_POST['liste_serv'];
+            $itineraire_ID = $_POST['liste_itinéraire'];
+            $direction = $_POST['liste_direction'];
+
+            $arretExistant = $bdd->prepare("SELECT COUNT(*) FROM TRAJET WHERE TRAJET_ID = ?");
+            $arretExistant->execute([$_POST['IDtrajet']]);
+            if ($arretExistant->fetchColumn() > 0) { 
+                throw new Exception("ID de trajet déjà utilisé.");
+            }
+
+            // Insertion à la table trajet
+            $insertTraj = $bdd->prepare("INSERT INTO TRAJET (TRAJET_ID, SERVICE_ID, ITINERAIRE_ID, DIRECTION) VALUES (?, ?, ?, ?)");
+            $insertTraj->execute([$trajet_ID, $service_ID, $itineraire_ID, $direction]);
+
+            $lines = explode("\n", $_POST['horaire']);
+            
+            if($lines){
+                foreach($lines as $line) {
+                    if (trim($line) == '') continue;
+                    $ln = explode(',', $line);
+                    $l = array_map('trim', $ln);
+                    $arret = $l[0];
+                    $hArriv = $l[1] ?? null;
+                    $hDep = $l[2] ?? null;
+
+                    $idArret = $bdd->prepare("SELECT ID FROM ARRET WHERE NOM = ?");
+                    $idArret->execute([$arret]);
+                    $arretRow = $idArret->fetch();
+
+                    if (!$arretRow) { 
+                        throw new Exception("Arrêt inexistant ou mal orthographié.");
+                    } 
+                    $arretID = $arretRow['ID'];
+
+                    if ($hArriv && !preg_match('/^\d{2}:\d{2}:\d{2}$/', $hArriv))
+                    { 
+                        throw new Exception("Erreur : format HH:MM:SS attendu pour l'heure d'arrivée.");
+                    }
+
+                    if ($hDep && !preg_match('/^\d{2}:\d{2}:\d{2}$/', $hDep))
+                    { 
+                        throw new Exception("Erreur : format HH:MM:SS attendu pour l'heure de de départ.");
+                    }
+
+                    if ($hArriv && $hDep && strtotime($hArriv) > strtotime($hDep)) { 
+                        throw new Exception("Erreur : l'heure de départ doit arriver plus tard que l'heure d'arrivée à l'arrêt.");
+                    }
+
+                    // Insertion à la table horaire
+                    $insertHoraire = $bdd->prepare("INSERT INTO HORAIRE (TRAJET_ID, ITINERAIRE_ID, ARRET_ID, HEURE_ARRIVEE, HEURE_DEPART)
+                    VALUES (?, ?, ?, ?, ?)");
+                    $insertHoraire->execute([$trajet_ID, $itineraire_ID, $arretID, $hArriv ?: null, $hDep ?: null]);
+                }
+            } 
+            $bdd->commit();
+            ?>
+            <p>Horaire et trajet <?= htmlentities($trajet_ID)?> ajoutés avec succès.</p>
+        <?php 
+        }
+        catch (Exception $e)
+            {
+                $bdd->rollBack();
+                if ($e instanceof \PDOException) {
+                    die("Une erreur interne est survenue.");
+                } else {
+                    die($e->getMessage());
+                }
+            }
     }
     ?>
 </body>
