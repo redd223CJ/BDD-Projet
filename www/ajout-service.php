@@ -36,9 +36,11 @@ error_reporting(E_ALL);
 </form>
 
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
     $pdo = null;
-    try {
+    try 
+    {
         $pdo = new PDO('mysql:host=ms8db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -56,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_service = ($row['max_id'] ?? 0) + 1;
 
         $joursFinal = [];
-        foreach (['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'] as $j) {
+        foreach (['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'] as $j)
+        {
             $joursFinal[] = in_array($j, $joursCochés) ? 1 : 0;            // transforme jours en 0 ou 1
         }
 
@@ -67,15 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $exceptions = explode("\n", $_POST['exceptions']);
         $stmt_exc = $pdo->prepare("INSERT INTO EXCEPTION (SERVICE_ID, DATE, CODE) VALUES (?, ?, ?)");
-        foreach ($exceptions as $line) {
+        
+        foreach ($exceptions as $line)
+        {
             $line = trim($line);
-            if ($line !== '') {
+            if ($line !== '')
+            {
                 [$date, $code] = explode(' ', $line);
                 $code = strtoupper($code);
                 $code_val = ($code === 'INCLUS') ? 1 : (($code === 'EXCLUS') ? 2 : null);
-                if ($code_val === null) {
+                if ($code_val === null)
+                {
                     throw new Exception("Code d'exception invalide : $code");
                 }
+                
                 $stmt_exc->execute([$id_service, $date, $code_val]);        // insert exception
             }
         }
@@ -84,10 +92,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->commit();
         echo "<p style='color:green;'>Service ajouté avec succès</p>";
 
-    } catch (Exception $e) {
-        if ($pdo) {
-            $pdo->rollBack();        // annule transaction si erreur (rollback)
+    }
+    
+    catch (Exception $e)
+    {
+        if ($pdo)
+        {
+            $pdo->rollBack();        // annule la transaction si erreur (rollback)
         }
+        
         echo "<p style='color:red;'>Erreur : " . $e->getMessage() . "</p>";
     }
 }
