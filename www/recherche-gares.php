@@ -14,11 +14,13 @@
     </form>
 
 <?php
-if (!empty($_GET['nom'])) {
+if (!empty($_GET['nom']))
+{
     $nom = strtolower(trim($_GET['nom']));           // minuscule et espaces en moins
     $min = isset($_GET['min']) && is_numeric($_GET['min']) ? intval($_GET['min']) : 0; // minimum (pas obligatoir)
 
-    try {
+    try
+    {
         $pdo = new PDO('mysql:host=ms8db;dbname=group22;charset=utf8', 'group22', 'ulgfsa'); // connexion BDD
 
         $sql = "
@@ -46,9 +48,11 @@ if (!empty($_GET['nom'])) {
 
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);                // recup resultat en tableau assoc
 
-        if (count($rows) > 0) {
+        if (count($rows) > 0)
+        {
             echo "<table border='1'><tr><th>Gare</th><th>Service</th><th>Arrêts</th><th>Arrivées</th><th>Départs</th></tr>";
-            foreach ($rows as $row) {
+            foreach ($rows as $row)
+            {
                 echo "<tr>
                     <td>" . htmlspecialchars($row['gare']) . "</td>
                     <td>" . htmlspecialchars($row['service']) . "</td>
@@ -58,13 +62,22 @@ if (!empty($_GET['nom'])) {
                 </tr>";
             }
             echo "</table>";
-        } else {
+        }
+        
+        else
+        {
             echo "<p>Aucun resultat trouve.</p>";                 // si aucun resultat
         }
-    } catch (Exception $e) {
+    }
+    
+    catch (Exception $e)
+    {
         echo "<p style='color:red;'>Erreur : " . htmlspecialchars($e->getMessage()) . "</p>"; // gestion erreur
     }
-} elseif (isset($_GET['nom'])) {
+}
+
+elseif (isset($_GET['nom']))
+{
     echo "<p style='color:red;'>La chaine de recherche ne peut pas etre vide.</p>"; // nom vide
 }
 
