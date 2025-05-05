@@ -132,9 +132,9 @@ Charleroi, 10:45:00, "></textarea>
             $itineraire_ID = $_POST['liste_itinéraire'];
             $direction = $_POST['liste_direction'];
 
-            $arretExistant = $bdd->prepare("SELECT COUNT(*) FROM TRAJET WHERE TRAJET_ID = ?");
-            $arretExistant->execute([$_POST['IDtrajet']]);
-            if ($arretExistant->fetchColumn() > 0) { 
+            $trajetExistant = $bdd->prepare("SELECT COUNT(*) FROM TRAJET WHERE TRAJET_ID = ?");
+            $trajetExistant->execute([$_POST['IDtrajet']]);
+            if ($trajetExistant->fetchColumn() > 0) { 
                 throw new Exception("ID de trajet déjà utilisé.");
             }
 
