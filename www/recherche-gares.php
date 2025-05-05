@@ -54,8 +54,8 @@ if (!empty($_GET['nom']))
             foreach ($rows as $row)
             {
                 echo "<tr>
-                    <td>" . htmlspecialchars($row['gare']) . "</td>
-                    <td>" . htmlspecialchars($row['service']) . "</td>
+                    <td>{$row['gare']}</td>
+                    <td>{$row['service']}</td>
                     <td>{$row['total_arrets']}</td>
                     <td>{$row['arrivées']}</td>
                     <td>{$row['departs']}</td>
