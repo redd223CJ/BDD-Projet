@@ -29,21 +29,26 @@ if (!empty($_GET['nom']))
                 S.NOM AS service,
                 COUNT(*) AS total_arrets,
                 SUM(HEURE_ARRIVEE IS NOT NULL) AS arrivées,      -- nb arrivees
-                SUM(HEURE_DEPART IS NOT NULL) AS departs        
+                SUM(HEURE_DEPART IS NOT NULL) AS departs
+                
             FROM ARRET A
             JOIN HORAIRE H ON A.ID = H.ARRET_ID
             JOIN TRAJET T ON H.TRAJET_ID = T.TRAJET_ID
             JOIN SERVICE S ON T.SERVICE_ID = S.ID
+            
             WHERE LOWER(A.NOM) LIKE ?                            -- filtre avec le nom de la gare
             GROUP BY A.NOM, S.NOM
+            
             HAVING total_arrets >= ?
                OR arrivées >= ?
                OR departs >= ?                                   -- applique min si on en a mis un
+               
             ORDER BY total_arrets DESC, arrivées DESC, departs DESC
         ";
 
         $stmt = $pdo->prepare($sql);                              // preparation requete
         $likeNom = "%$nom%";
+        
         $stmt->execute([$likeNom, $min, $min, $min]);             // execution avec valeurs
 
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);                // recup resultat en tableau assoc
