@@ -14,10 +14,9 @@
     </form>
 
 <?php
-if (!empty($_GET['nom']))
-{
-    $nom = strtolower(trim($_GET['nom']));           // minuscule et espaces en moins
-    $min = isset($_GET['min']) && is_numeric($_GET['min']) ? intval($_GET['min']) : 0; // minimum (pas obligatoir)
+if (!empty($_GET['nom']) && trim($_GET['nom']) !== '') {
+    $nom = strtolower(trim($_GET['nom']));              //si y a juste un espace, on l'enleve sinon ca nous donnera toutes les gares
+    $min = isset($_GET['min']) && is_numeric($_GET['min']) ? intval($_GET['min']) : 0; // minimum
 
     try
     {
