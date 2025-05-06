@@ -11,9 +11,11 @@
         $bdd->beginTransaction();
         // temps moyen global
         $sql_global = "SELECT 
-                          SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(h.HEURE_ARRIVEE, h.HEURE_DEPART)))) as temps_arret_moyen
+                          SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(h.HEURE_DEPART, h.HEURE_ARRIVEE)))) as temps_arret_moyen
                        FROM 
-                          HORAIRE h";
+                          HORAIRE h
+                       WHERE 
+                          h.HEURE_ARRIVEE IS NOT NULL AND h.HEURE_DEPART IS NOT NULL";
         
         $statement_global = $bdd->prepare($sql_global);
         $statement_global->execute();
@@ -24,13 +26,15 @@
                     i.ID as itineraire_id,
                     i.NOM as itineraire_nom,
                     t.TRAJET_ID,
-                    SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(h.HEURE_ARRIVEE, h.HEURE_DEPART)))) as temps_arret_moyen
+                    SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(h.HEURE_DEPART, h.HEURE_ARRIVEE)))) as temps_arret_moyen
                 FROM 
                     HORAIRE h
                 JOIN 
                     TRAJET t ON h.TRAJET_ID = t.TRAJET_ID
                 JOIN 
                     ITINERAIRE i ON t.ITINERAIRE_ID = i.ID
+                WHERE 
+                    h.HEURE_ARRIVEE IS NOT NULL AND h.HEURE_DEPART IS NOT NULL
                 GROUP BY 
                     i.ID, i.NOM, t.TRAJET_ID
                 ORDER BY 
@@ -42,13 +46,15 @@
         $sql_itineraire = "SELECT 
                               i.ID as itineraire_id,
                               i.NOM as itineraire_nom,
-                              SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(h.HEURE_ARRIVEE, h.HEURE_DEPART)))) as temps_arret_moyen
+                              SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(h.HEURE_DEPART, h.HEURE_ARRIVEE)))) as temps_arret_moyen
                            FROM 
                               HORAIRE h
                            JOIN 
                               TRAJET t ON h.TRAJET_ID = t.TRAJET_ID
                            JOIN 
                               ITINERAIRE i ON t.ITINERAIRE_ID = i.ID
+                           WHERE 
+                    	      h.HEURE_ARRIVEE IS NOT NULL AND h.HEURE_DEPART IS NOT NULL
                            GROUP BY 
                               i.ID, i.NOM
                            ORDER BY 
