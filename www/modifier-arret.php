@@ -9,10 +9,10 @@
     <form method="post" action="modifier-arret.php">
         <p>Filtrer les arrêts selon un ou plusieurs critères (recherche insensible à la casse).</p>
         <input type="hidden" name="action" value="filtrer" />
-        <input type="text" name="id" placeholder="ID">
+        <input type="number" name="id" placeholder="ID">
         <input type="text" name="nom" placeholder="Nom">
-        <input type="text" name="latitude" placeholder="Latitude">
-        <input type="text" name="longitude" placeholder="Longitude">
+        <input type="number" step="any" name="latitude" placeholder="Latitude">
+        <input type="number" step="any" name="longitude" placeholder="Longitude">
         <input type="submit" value="Filtrer">
     </form>
 
@@ -129,8 +129,13 @@
 
         $statement->execute();
 
+        echo $originalID;
+        echo "<h2>L'arrêt avec l'ID " . $_POST['originalId'] . " a bien été modifié !</h2>";
 
-        echo "<h2>L'arrêt avec l'ID " . $originalID . " a bien été modifié !</h2>";
+        if ((int)$_POST['id'] !== (int)$_POST['originalId']) {
+            echo "<h2>Nouvel ID " . $_POST['id'] . "</h2>";
+        }
+
     }
 
 
