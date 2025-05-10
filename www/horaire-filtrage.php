@@ -10,8 +10,8 @@
         <p>Filtrer les horaires selon un ou plusieurs critères (recherche insensible à la casse).</p>
         <input type="hidden" name="action" value="filtrer" />
         <input type="text" name="trajet_id" placeholder="ID trajet">
-        <input type="text" name="itineraire_id" placeholder="ID itinéraire">
-        <input type="text" name="arret_id" placeholder="ID arrêt">
+        <input type="number" name="itineraire_id" placeholder="ID itinéraire">
+        <input type="number" name="arret_id" placeholder="ID arrêt">
         <input type="time" step=1 name="heure_arrivee" placeholder="Heure d'arrivée">
         <input type="time" step=1 name="heure_depart" placeholder="Heure de départ">
         <input type="submit" value="Filtrer">
