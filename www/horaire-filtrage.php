@@ -19,15 +19,6 @@
 
     <h1>Résultats</h1>
 
-    <table border="1">
-      <tr>
-          <th>ID Trajet</th>
-          <th>ID itinéraire</th>
-          <th>ID arrêt</th>
-          <th>Heure d'arrivée</th>
-          <th>Heure de départ</th>
-      </tr>
-
 <?php
     $bdd = new PDO('mysql:host=db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
   
@@ -77,15 +68,30 @@
 
         $statement = $bdd->prepare($sql);                
         $res = $statement->execute($params);
+        $results = $statement->fetchAll();
 
-        while ($tuple = $statement->fetch()) {
-            echo "<tr>";
-            echo "<td>" . $tuple['TRAJET_ID'] . "</td>";
-            echo "<td>" . $tuple['ITINERAIRE_ID'] . "</td>";
-            echo "<td>" . $tuple['ARRET_ID'] . "</td>";
-            echo "<td>" . $tuple['HEURE_ARRIVEE'] . "</td>";
-            echo "<td>" . $tuple['HEURE_DEPART'] . "</td>";
-            echo "</tr>";
+        if(count($results) > 0) {
+            ?>
+            <table border="1">
+                <tr>
+                    <th>ID Trajet</th>
+                    <th>ID itinéraire</th>
+                    <th>ID arrêt</th>
+                    <th>Heure d'arrivée</th>
+                    <th>Heure de départ</th>
+                </tr>
+            <?php
+            foreach ($results as $tuple) {
+                echo "<tr>";
+                echo "<td>" . $tuple['TRAJET_ID'] . "</td>";
+                echo "<td>" . $tuple['ITINERAIRE_ID'] . "</td>";
+                echo "<td>" . $tuple['ARRET_ID'] . "</td>";
+                echo "<td>" . $tuple['HEURE_ARRIVEE'] . "</td>";
+                echo "<td>" . $tuple['HEURE_DEPART'] . "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<h2>Aucun résultats</h2>";
         }
     }
 ?>
