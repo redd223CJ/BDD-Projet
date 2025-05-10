@@ -60,10 +60,10 @@ if (!empty($_GET['nom']) && trim($_GET['nom']) !== '')
         {
             echo "<table border='1'><tr><th>Gare</th><th>Service</th><th>Arrets</th><th>Arrivees</th><th>Departs</th></tr>";
             foreach ($rows as $row)
-            {                                               // tableau
+            {                                               // tableau ("htmlspecialchars" pour protéger contre les injections de données)
                 echo "<tr>
-                    <td>{$row['gare']}</td>
-                    <td>{$row['service']}</td>
+                    <td>" . htmlspecialchars($row['gare']) . "</td>
+                    <td>" . htmlspecialchars($row['service']) . "</td>
                     <td>{$row['total_arrets']}</td>
                     <td>{$row['arrivees']}</td>
                     <td>{$row['departs']}</td>
