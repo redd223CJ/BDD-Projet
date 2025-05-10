@@ -6,6 +6,8 @@
 </head>
 
 <body>
+    <h1>Rechercher et modifier des arrêts</h1>
+
     <form method="post" action="modifier-arret.php">
         <p>Filtrer les arrêts selon un ou plusieurs critères (recherche insensible à la casse).</p>
         <input type="hidden" name="action" value="filtrer" />
