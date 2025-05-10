@@ -10,7 +10,7 @@
         <p>Filtrer les exceptions selon un ou plusieurs critères (recherche insensible à la casse).</p>
         <input type="hidden" name="action" value="filtrer" />
         <input type="text" name="service_id" placeholder="ID service">
-        <input type="text" name="date" placeholder="Date">
+        <input type="date" name="date" placeholder="Date">
         <input type="text" name="code" placeholder="Code">
         <input type="submit" value="Filtrer">
     </form>
