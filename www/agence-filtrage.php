@@ -93,7 +93,7 @@
                 echo "</tr>";
             }
         } else {
-            echo "<h2>Aucun résultats</h2>";
+            echo "<h2>Aucun résultat</h2>";
         }
 
     }

@@ -8,7 +8,7 @@
     <form method="get">
         <label>Nom contient :</label>
         <input type="text" name="nom" required>
-        <label>Nombre min d’arrets/departs/arrivees (facultatif) :</label>
+        <label>Nombre min. d’arrêts/départs/arrivées (facultatif) :</label>
         <input type="number" name="min">
         <input type="submit" value="Rechercher">
     </form>
@@ -58,7 +58,7 @@ if (!empty($_GET['nom']) && trim($_GET['nom']) !== '')
 
         if (count($rows) > 0)
         {
-            echo "<table border='1'><tr><th>Gare</th><th>Service</th><th>Arrets</th><th>Arrivees</th><th>Departs</th></tr>";
+            echo "<table border='1'><tr><th>Gare</th><th>Service</th><th>Arrêts</th><th>Arrivées</th><th>Départs</th></tr>";
             foreach ($rows as $row)
             {                                               // tableau ("htmlspecialchars" pour protéger contre les injections de données)
                 echo "<tr>
@@ -75,7 +75,7 @@ if (!empty($_GET['nom']) && trim($_GET['nom']) !== '')
         
         else
         {
-            echo "<p>Aucun resultat trouve.</p>";           // si aucun resultat, on renvoit un msg
+            echo "<p>Aucun résultat trouvé.</p>";           // si aucun resultat, on renvoit un msg
         }
     }
     
@@ -87,7 +87,7 @@ if (!empty($_GET['nom']) && trim($_GET['nom']) !== '')
 
 elseif (isset($_GET['nom']) && $_SERVER['REQUEST_METHOD'] === 'GET')
 {
-    echo "<p style='color:red;'>La chaine de recherche ne peut pas etre vide.</p>";         // pour les noms vides
+    echo "<p style='color:red;'>La chaine de recherche ne peut pas être vide.</p>";         // pour les noms vides
 }
 ?>
 

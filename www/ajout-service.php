@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         
 
         $pdo->commit();
-        echo "<p style='color:green;'>Service ajouté avec succès</p>";
+        echo "<p>Service ajouté avec succès</p>";
 
     }
     
