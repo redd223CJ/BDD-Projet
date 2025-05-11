@@ -84,16 +84,16 @@
             <?php
             foreach ($results as $tuple) {
                 echo "<tr>";
-                echo "<td>" . $tuple['ID'] . "</td>";
-                echo "<td>" . $tuple['NOM'] . "</td>";
-                echo "<td>" . $tuple['URL'] . "</td>";
-                echo "<td>" . $tuple['FUSEAU_HORAIRE'] . "</td>";
-                echo "<td>" . $tuple['TELEPHONE'] . "</td>";
-                echo "<td>" . $tuple['SIEGE'] . "</td>";
+                echo "<td>" . htmlentities($tuple['ID']) . "</td>";
+                echo "<td>" . htmlentities($tuple['NOM']) . "</td>";
+                echo "<td>" . htmlentities($tuple['URL']) . "</td>";
+                echo "<td>" . htmlentities($tuple['FUSEAU_HORAIRE']) . "</td>";
+                echo "<td>" . htmlentities($tuple['TELEPHONE']) . "</td>";
+                echo "<td>" . htmlentities($tuple['SIEGE']) . "</td>";
                 echo "</tr>";
             }
         } else {
-            echo "<h2>Aucun résultat</h2>";
+            echo "<h2>Aucun résultats</h2>";
         }
 
     }

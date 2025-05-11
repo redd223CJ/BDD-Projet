@@ -83,11 +83,11 @@
             <?php
             foreach ($results as $tuple) {
                 echo "<tr>";
-                echo "<td>" . $tuple['TRAJET_ID'] . "</td>";
-                echo "<td>" . $tuple['ITINERAIRE_ID'] . "</td>";
-                echo "<td>" . $tuple['ARRET_ID'] . "</td>";
-                echo "<td>" . $tuple['HEURE_ARRIVEE'] . "</td>";
-                echo "<td>" . $tuple['HEURE_DEPART'] . "</td>";
+                echo "<td>" . htmlentities($tuple['TRAJET_ID']) . "</td>";
+                echo "<td>" . htmlentities($tuple['ITINERAIRE_ID']) . "</td>";
+                echo "<td>" . htmlentities($tuple['ARRET_ID']) . "</td>";
+                echo "<td>" . htmlentities($tuple['HEURE_ARRIVEE']) . "</td>";
+                echo "<td>" . htmlentities($tuple['HEURE_DEPART']) . "</td>";
                 echo "</tr>";
             }
         } else {

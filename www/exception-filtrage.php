@@ -69,9 +69,9 @@
             <?php
             foreach ($results as $tuple) {
                 echo "<tr>";
-                echo "<td>" . $tuple['SERVICE_ID'] . "</td>";
-                echo "<td>" . $tuple['DATE'] . "</td>";
-                echo "<td>" . $tuple['CODE'] . "</td>";
+                echo "<td>" . htmlentities($tuple['SERVICE_ID']) . "</td>";
+                echo "<td>" . htmlentities($tuple['DATE']) . "</td>";
+                echo "<td>" . htmlentities($tuple['CODE']) . "</td>";
                 echo "</tr>";
             }
         } else {

@@ -64,7 +64,7 @@
         $statement_itineraire->execute();
         $itineraires_avg = $statement_itineraire->fetchAll();
         
-        echo "<h2>Temps d'arrêt moyen global: " . $global_avg['temps_arret_moyen'] . "</h2>";
+        echo "<h2>Temps d'arrêt moyen global: " . htmlentities($global_avg['temps_arret_moyen']) . "</h2>";
 
         echo "<h2>Temps d'arrêt moyen par itinéraire et trajet</h2>";
         echo "<table border='1' cellpadding='5' cellspacing='0'>";
@@ -77,18 +77,18 @@
             while ($trajet = $statement->fetch()) {
                 if ($trajet['itineraire_id'] == $row['itineraire_id']) {
                     echo "<tr>";
-                    echo "<td>" . $row['itineraire_nom'] . "</td>";
-                    echo "<td>" . $trajet['TRAJET_ID'] . "</td>";
-                    echo "<td>" . $trajet['temps_arret_moyen'] . "</td>";
+                    echo "<td>" . htmlentities($row['itineraire_nom']) . "</td>";
+                    echo "<td>" . htmlentities($trajet['TRAJET_ID']) . "</td>";
+                    echo "<td>" . htmlentities($trajet['temps_arret_moyen']) . "</td>";
                     echo "</tr>";
                 }
             }
 
             // temps moyen par itinéraire
             echo "<tr>";
-            echo "<td>" . $row['itineraire_nom'] . "</td>";
+            echo "<td>" . htmlentities($row['itineraire_nom']) . "</td>";
             echo "<td></td>";
-            echo "<td>" . $row['temps_arret_moyen'] . "</td>";
+            echo "<td>" . htmlentities($row['temps_arret_moyen']) . "</td>";
             echo "</tr>";
 
         }
