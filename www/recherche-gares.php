@@ -21,9 +21,9 @@ if (!empty($_GET['nom']) && trim($_GET['nom']) !== '')
 
     try
     {
-        $pdo = new PDO('mysql:host=ms8db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
+        $bdd = new PDO('mysql:host=ms8db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
 
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $sql = "
             SELECT 
@@ -49,7 +49,7 @@ if (!empty($_GET['nom']) && trim($_GET['nom']) !== '')
         ";
 
 
-        $stmt = $pdo->prepare($sql);
+        $stmt = $bdd->prepare($sql);
         $likeNom = "%$nom%";
 
         $stmt->execute([$likeNom, $min, $min, $min]);       // execution avec valeurs
