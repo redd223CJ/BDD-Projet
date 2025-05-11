@@ -38,13 +38,13 @@ error_reporting(E_ALL);
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
-    $pdo = null;
+    $bdd = null;
     try 
     {
-        $pdo = new PDO('mysql:host=ms8db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $bdd = new PDO('mysql:host=ms8db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
+        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $pdo->beginTransaction();                 // debut de transaction
+        $bdd->beginTransaction();                 // debut de transaction
 
         $nom = $_POST['nom'];
         $joursCochés = $_POST['jours'] ?? [];     // recup jours coches (ou vide)
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 
         // Récupérer un ID unique
         $sql_max_id = "SELECT MAX(ID) AS max_id FROM SERVICE";
-        $result = $pdo->query($sql_max_id);
+        $result = $bdd->query($sql_max_id);
         $row = $result->fetch(PDO::FETCH_ASSOC);
         $id_service = ($row['max_id'] ?? 0) + 1;
 
@@ -65,11 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 
         $sql = "INSERT INTO SERVICE (ID, NOM, LUNDI, MARDI, MERCREDI, JEUDI, VENDREDI, SAMEDI, DIMANCHE, DATE_DEBUT, DATE_FIN) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $pdo->prepare($sql);
+        $stmt = $bdd->prepare($sql);
         $stmt->execute(array_merge([$id_service, $nom], $joursFinal, [$date_debut, $date_fin]));        // insertion du service
 
         $exceptions = explode("\n", $_POST['exceptions']);
-        $stmt_exc = $pdo->prepare("INSERT INTO EXCEPTION (SERVICE_ID, DATE, CODE) VALUES (?, ?, ?)");
+        $stmt_exc = $bdd->prepare("INSERT INTO EXCEPTION (SERVICE_ID, DATE, CODE) VALUES (?, ?, ?)");
         
         foreach ($exceptions as $line)
         {
@@ -88,17 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
             }
         }
         
-
-        $pdo->commit();
+        $bdd->commit();
         echo "<p>Service ajouté avec succès</p>";
 
     }
     
     catch (Exception $e)
     {
-        if ($pdo)
+        if ($bdd)
         {
-            $pdo->rollBack();        // annule la transaction si erreur (rollback)
+            $bdd->rollBack();        // annule la transaction si erreur (rollback)
         }
         
         echo "<p style='color:red;'>Erreur : " . $e->getMessage() . "</p>";
