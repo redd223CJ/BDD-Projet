@@ -21,7 +21,7 @@ error_reporting(E_ALL);
         <?php
         $jours = ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
         foreach ($jours as $jour) {
-            echo "<label><input type='checkbox' name='jours[]' value='$jour'> " . ucfirst($jour) . "</label><br>";
+            echo "<label><input type='checkbox' name='jours[]' value='$jour'> " . ucfirst($jour) . "</label><br>";        //checkbox
         }
         ?>
     </fieldset><br>
