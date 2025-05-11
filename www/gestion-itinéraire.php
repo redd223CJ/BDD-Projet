@@ -16,7 +16,7 @@
             $bdd = new PDO('mysql:host=db;dbname=group22;charset=utf8', 'group22', 'ulgfsa');
             $req = $bdd->query("SELECT ID,NOM FROM ITINERAIRE ORDER BY ID");
             foreach ($req as $row) { ?>
-                <option value="<?= $row['ID']; ?>"><?= $row['NOM']; ?></option>
+                <option value="<?= htmlentities($row['ID']); ?>"><?= $row['NOM']; ?></option>
             <?php } ?>
         </select>
 
@@ -43,7 +43,7 @@
                 $suppItineraire->execute([$id]); 
 
                 if ($suppHoraire && $suppArretDesservi && $suppTrajet && $suppItineraire) { ?>
-                    <p>Vous avez supprimé l'itinéraire <?= $id ?> et ses trajets correspondants. &#10003; <br> Veuillez actualiser pour mettre les changements à jour sur cette page.</p>
+                    <p>Vous avez supprimé l'itinéraire <?= htmlentities($id) ?> et ses trajets correspondants. &#10003; <br> Veuillez actualiser pour mettre les changements à jour sur cette page.</p>
                     <?php
                     $bdd->commit();
                 }
@@ -73,7 +73,7 @@
             <?php
             $ls_itin = $bdd->query("SELECT ID, NOM FROM ITINERAIRE ORDER BY ID");
             foreach ($ls_itin as $row) { ?>
-                <option value="<?= $row['ID']; ?>"><?= $row['NOM']; ?></option>
+                <option value="<?= htmlentities($row['ID']); ?>"><?= htmlentities($row['NOM']); ?></option>
             <?php } ?>
         </select><br>
 
@@ -91,7 +91,7 @@
             <?php
             $serv = $bdd->query("SELECT ID,NOM FROM SERVICE ORDER BY ID");
             foreach ($serv as $row) { ?>
-                <option value="<?= $row['ID']; ?>"><?= $row['NOM']; ?></option>
+                <option value="<?= htmlentities($row['ID']); ?>"><?= htmlentities($row['NOM']); ?></option>
             <?php } ?>
         </select>
 
@@ -111,9 +111,9 @@ Charleroi, 10:45:00, "></textarea>
 
             <!-- Hidden inputs pour passer les données du formulaire précédent. -->
             <input type="hidden" name="IDtrajet" value="<?= htmlentities($_POST['IDtrajet']) ?>">
-            <input type="hidden" name="liste_itinéraire" value="<?= $_POST['liste_itinéraire'] ?>">
-            <input type="hidden" name="liste_direction" value="<?= $_POST['liste_direction'] ?>">
-            <input type="hidden" name="liste_serv" value="<?= $_POST['liste_serv'] ?>">
+            <input type="hidden" name="liste_itinéraire" value="<?= htmlentities($_POST['liste_itinéraire']) ?>">
+            <input type="hidden" name="liste_direction" value="<?= htmlentities($_POST['liste_direction']) ?>">
+            <input type="hidden" name="liste_serv" value="<?= htmlentities($_POST['liste_serv']) ?>">
 
 
             <input type="submit" value="Ajouter le trajet">
